@@ -9,7 +9,12 @@ from .models import Women
 from .serializers import WomenSerializer
 
 
-# Simple realization of API request without serializer
+class WomenAPIList(generics.ListCreateAPIView):
+    queryset = Women.objects.all()
+    serializer_class = WomenSerializer
+
+
+
 class WomenAPIView(APIView):
     def get(self, request):
         w = Women.objects.all()
