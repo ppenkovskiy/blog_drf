@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.shortcuts import render
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
@@ -13,10 +14,17 @@ from .permissions import *
 from .serializers import WomenSerializer
 
 
+class WomenAPIListPagination(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = 'page_size'
+    max_page_size = 10000
+
+
 class WomenAPIList(generics.ListCreateAPIView):
     queryset = Women.objects.all()
     serializer_class = WomenSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = WomenAPIListPagination
 
 
 class WomenAPIUpdate(generics.RetrieveUpdateAPIView):
@@ -31,14 +39,6 @@ class WomenAPIDestroy(generics.RetrieveDestroyAPIView):
     serializer_class = WomenSerializer
     # permission_classes = (IsAdminUser,)
     permission_classes = (IsAdminOrReadOnly,)
-
-
-
-
-
-
-
-
 
 # class WomenViewSet(viewsets.ModelViewSet):
 #     # queryset = Women.objects.all()
@@ -58,20 +58,6 @@ class WomenAPIDestroy(generics.RetrieveDestroyAPIView):
 #         return Response({'cats': [c.name for c in cats]})
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # You can replace all this Views with ViewSet to exclude code repetition.
 
 # class WomenAPIList(generics.ListCreateAPIView):
@@ -85,17 +71,6 @@ class WomenAPIDestroy(generics.RetrieveDestroyAPIView):
 # class WomenAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 #     queryset = Women.objects.all()
 #     serializer_class = WomenSerializer
-
-
-
-
-
-
-
-
-
-
-
 
 
 # class WomenAPIView(APIView):
