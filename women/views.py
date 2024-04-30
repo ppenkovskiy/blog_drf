@@ -1,16 +1,8 @@
-from django.forms import model_to_dict
-from rest_framework import generics, viewsets
-from rest_framework import serializers
-from django.shortcuts import render
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import action
+from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
-from rest_framework.renderers import JSONRenderer
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import Women, Category
-from .permissions import *
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from .models import Women
+from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from .serializers import WomenSerializer
 
 
@@ -30,15 +22,24 @@ class WomenAPIList(generics.ListCreateAPIView):
 class WomenAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Women.objects.all()
     serializer_class = WomenSerializer
-    permission_classes = (IsAuthenticated,)
-    # authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
 
 class WomenAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Women.objects.all()
     serializer_class = WomenSerializer
-    # permission_classes = (IsAdminUser,)
     permission_classes = (IsAdminOrReadOnly,)
+
+
+
+
+
+
+
+
+
+
+
 
 # class WomenViewSet(viewsets.ModelViewSet):
 #     # queryset = Women.objects.all()
@@ -56,6 +57,25 @@ class WomenAPIDestroy(generics.RetrieveDestroyAPIView):
 #     def category(self, request, pk=None):
 #         cats = Category.objects.get(pk=pk)
 #         return Response({'cats': [c.name for c in cats]})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # You can replace all this Views with ViewSet to exclude code repetition.
